@@ -37,7 +37,7 @@ jobs:
           on_develop: false
 
     steps:
-    - uses: ./.github/actions/checkout-spack
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
     - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
       with:
         python-version: ${{ matrix.python-version }}
@@ -51,7 +51,8 @@ jobs:
     - name: Install Python packages
       run: |
           pip install --upgrade pip setuptools pytest pytest-xdist
-    - name: Run unit tests
+    - uses: ./.github/actions/checkout-spack
+    - name: Run unit tests (without coverage)
       run: |
           . ./spack-core/share/spack/setup-env.sh
           PYTHONPATH=${SPACK_ROOT}/lib/spack:${SPACK_ROOT}/lib/spack/external:${PYTHONPATH} python3 -m pytest --exitfirst
@@ -64,7 +65,7 @@ jobs:
         os: [macos-13, macos-14]
         python-version: ["3.11"]
     steps:
-    - uses: ./.github/actions/checkout-spack
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
     - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
       with:
         python-version: ${{ matrix.python-version }}
@@ -75,7 +76,8 @@ jobs:
     - name: Setup Homebrew packages
       run: |
         brew install dash fish gcc gnupg
-    - name: Run unit tests
+    - uses: ./.github/actions/checkout-spack
+    - name: Run unit tests (without coverage)
       run: |
         . ./spack-core/share/spack/setup-env.sh
         PYTHONPATH=${SPACK_ROOT}/lib/spack:${SPACK_ROOT}/lib/spack/external:${PYTHONPATH} python3 -m pytest --exitfirst
@@ -88,7 +90,7 @@ jobs:
     #      powershell Invoke-Expression -Command "./ci/windows_test_setup.ps1"; {0}
     runs-on: windows-latest
     steps:
-    - uses: ./.github/actions/checkout-spack
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
     - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b
       with:
         python-version: 3.9
@@ -98,7 +100,8 @@ jobs:
     #- name: Create local develop
     #  run: |
     #    ./.github/workflows/bin/setup_git.ps1
-    - name: Unit Test
+    - uses: ./.github/actions/checkout-spack
+    - name: Run unit tests (without coverage)
       run: |
         . ./spack-core/share/spack/setup-env.sh
         PYTHONPATH=${SPACK_ROOT}/lib/spack:${SPACK_ROOT}/lib/spack/external:${PYTHONPATH} python3 -m pytest --exitfirst
