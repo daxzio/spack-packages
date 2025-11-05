@@ -156,6 +156,13 @@ class Tau(Package):
     variant(
         "perfetto", default=True, description="Activates Perfetto tracing support", when="@2.35:"
     )
+    variant(
+        "force-legacy-l0",
+        default=False,
+        description="Use of Legacy L0 profiler. Option required for old drivers/GPU.",
+        when="@2.35:",
+    )
+
     depends_on("c", type="build")  # generated
     depends_on("cxx", type="build")  # generated
     depends_on("fortran", type="build")  # generated
@@ -239,6 +246,12 @@ class Tau(Package):
         policy="one_of",
         when="+rocm",
         msg="Using ROCm, select either +rocprofiler, +roctracer, +rocprofv2 or +rocprofiler-sdk",
+    )
+
+    requires(
+        "+level_zero",
+        when="+force-legacy-l0",
+        msg="Level zero needs to be enabled with +force-legacy-l0",
     )
 
     # https://github.com/UO-OACISS/tau2/commit/1d2cb6b
@@ -398,6 +411,11 @@ class Tau(Package):
 
         if "+level_zero" in spec:
             options.append("-level_zero=%s" % spec["oneapi-level-zero"].prefix)
+            if spec.satisfies("@2.35:"):
+                if "+force-legacy-l0" in spec:
+                    options.append("-force_legacy_l0")
+                else:
+                    options.append("-force_new_l0")
 
         if "+opencl" in spec:
             options.append("-opencl")
