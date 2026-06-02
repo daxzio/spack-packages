@@ -20,6 +20,7 @@ class Libgpiod(AutotoolsPackage):
     license("LGPL-2.1-or-later")
 
     version("master", branch="master")
+    version("2.2.4", sha256="8b201d7a665e9108cf1cef24fe59d567fcacc818a36e17cfee046dd96eafbb84")
     version("2.2.3", sha256="70de4639856620571f99d851cf1acd48f6462b62ccba929f1a0235ec76b4e4dc")
     version("2.2.2", sha256="02794831a65adab942620dd3e8f038ff881c3c127d7d26841d94caa8caea793f")
     version("2.2.1", sha256="c6054a64a12681beeb0ce5200867754843bb68465b06c543f132ad984aee3f83")
